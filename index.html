@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CitySolve Nepal – Community Innovation Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'DM Sans', sans-serif; background: #F7F5F0; color: #1A1A1A; line-height: 1.6; overflow-x: hidden; }
+:root {
+  --blue: #1B4FD8; --blue-light: #E8EEFB; --blue-dark: #0F2E85;
+  --orange: #E8560A; --orange-light: #FDF0EA;
+  --green: #1E7A3C; --green-light: #E8F5ED;
+  --bg: #F7F5F0; --bg-white: #FFFFFF;
+  --text: #1A1A1A; --text-muted: #6B6B6B;
+  --border: #E2DDD5; --radius: 12px; --radius-lg: 20px;
+}
+h1, h2, h3, h4, h5 { font-family: 'Syne', sans-serif; line-height: 1.15; }
+h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 800; }
+h2 { font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 700; }
+h3 { font-size: 1.2rem; font-weight: 600; }
+p { color: var(--text-muted); line-height: 1.75; }
+a { text-decoration: none; color: inherit; }
+.container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 88px 0; }
+.section-label {
+  display: inline-block; font-size: 0.73rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange);
+  background: var(--orange-light); padding: 5px 13px; border-radius: 100px; margin-bottom: 14px;
+}
+.section-title { color: var(--text); margin-bottom: 10px; }
+.section-sub { font-size: 1.02rem; max-width: 540px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px;
+  border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 0.93rem;
+  font-weight: 500; cursor: pointer; transition: all 0.2s; border: none;
+}
+.btn-primary { background: var(--blue); color: white; }
+.btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(27,79,216,0.35); }
+.btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+.btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+.btn-sm { padding: 7px 17px; font-size: 0.83rem; }
+.tag { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 0.74rem; font-weight: 500; margin: 2px; }
+.tag-env { background: var(--green-light); color: var(--green); }
+.tag-transport { background: #EEF0FD; color: #3B43B5; }
+.tag-waste { background: #FDF3E5; color: #A05A00; }
+.tag-water { background: #E5F4FD; color: #0077A8; }
+.tag-infra { background: #F5E8FD; color: #7922B3; }
+.tag-health { background: #FDEAEA; color: #B32222; }
+.tag-social { background: var(--orange-light); color: var(--orange); }
+.tag-sustain { background: var(--green-light); color: var(--green); border: 1px solid #A8D5B7; }
+ 
+/* NAVBAR */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(247,245,240,0.93); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+#navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 62px; max-width: 1160px; margin: 0 auto; padding: 0 24px;
+}
+.nav-logo { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.nav-logo-dot { width: 9px; height: 9px; background: var(--orange); border-radius: 50%; display: inline-block; }
+.nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--text-muted); transition: color 0.2s; }
+.nav-links a:hover { color: var(--blue); }
+.nav-cta { display: flex; gap: 10px; align-items: center; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+.mobile-menu { display: none; flex-direction: column; background: var(--bg-white); padding: 14px 24px 22px; border-top: 1px solid var(--border); gap: 0; }
+.mobile-menu a { padding: 11px 0; font-size: 0.97rem; font-weight: 500; color: var(--text); border-bottom: 1px solid var(--border); display: block; }
+.mobile-menu a:last-child { border-bottom: none; }
+@media (max-width: 768px) {
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .mobile-menu.open { display: flex; }
+}
+ 
+/* HERO */
+#hero { padding: 152px 0 96px; position: relative; overflow: hidden; background: var(--bg); }
+.hero-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.hero-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.16; }
+.blob-1 { width: 560px; height: 560px; background: var(--blue); top: -180px; right: -120px; }
+.blob-2 { width: 380px; height: 380px; background: var(--orange); bottom: -80px; left: -80px; }
+.blob-3 { width: 280px; height: 280px; background: var(--green); top: 50%; right: 22%; }
+.hero-content { position: relative; z-index: 1; max-width: 780px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--bg-white); border: 1px solid var(--border); border-radius: 100px; padding: 7px 15px; font-size: 0.83rem; font-weight: 500; color: var(--text-muted); margin-bottom: 26px; animation: fadeInDown 0.6s ease; }
+.hero-badge-dot { width: 7px; height: 7px; background: #22C55E; border-radius: 50%; animation: pulse 2s infinite; }
+.hero-title { color: var(--text); margin-bottom: 18px; animation: fadeInUp 0.7s ease 0.1s both; }
+.hero-title span { color: var(--blue); }
+.hero-sub { font-size: 1.1rem; max-width: 500px; margin-bottom: 38px; animation: fadeInUp 0.7s ease 0.2s both; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeInUp 0.7s ease 0.3s both; }
+.hero-stats { display: flex; gap: 36px; margin-top: 60px; flex-wrap: wrap; animation: fadeInUp 0.7s ease 0.4s both; }
+.hero-stat-num { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--text); }
+.hero-stat-label { font-size: 0.83rem; color: var(--text-muted); }
+.hero-stat-divider { width: 1px; background: var(--border); align-self: stretch; }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+ 
+/* HOW IT WORKS */
+#how-it-works { background: var(--bg-white); }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; margin-top: 52px; }
+.step-card { position: relative; padding: 30px 26px; background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); transition: transform 0.2s, box-shadow 0.2s; }
+.step-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.step-number { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--blue); opacity: 0.11; line-height: 1; margin-bottom: 10px; }
+.step-icon { font-size: 1.9rem; margin-bottom: 14px; }
+.step-card h3 { color: var(--text); margin-bottom: 7px; }
+ 
+/* CITY EXPLORER */
+#explore { background: var(--bg); }
+.city-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 14px; margin: 44px 0 36px; }
+.city-card { padding: 22px 18px; background: var(--bg-white); border: 2px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.22s ease; text-align: center; position: relative; }
+.city-card:hover { border-color: #A0B8F0; transform: translateY(-2px); }
+.city-card.active { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(27,79,216,0.14); background: var(--blue-light); }
+.city-emoji { font-size: 2rem; margin-bottom: 9px; display: block; }
+.city-card h4 { font-family: 'Syne', sans-serif; font-size: 0.97rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.city-card p { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
+.city-count { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 0.73rem; font-weight: 600; padding: 2px 9px; border-radius: 100px; margin-top: 7px; }
+.city-card.active .city-count { background: var(--blue); color: white; }
+.problems-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+.problems-city-name { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); }
+.filter-tabs { display: flex; gap: 7px; flex-wrap: wrap; }
+.filter-tab { padding: 5px 14px; border-radius: 100px; border: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.18s; }
+.filter-tab.active, .filter-tab:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+.problems-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.problem-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 11px; }
+.problem-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.problem-card-header { display: flex; align-items: flex-start; gap: 12px; }
+.problem-icon { font-size: 1.7rem; flex-shrink: 0; }
+.problem-card h3 { color: var(--text); font-size: 1.02rem; margin-bottom: 2px; }
+.problem-card-desc { font-size: 0.88rem; color: var(--text-muted); flex: 1; }
+.problem-tags { display: flex; flex-wrap: wrap; gap: 3px; }
+.problem-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 11px; border-top: 1px solid var(--border); }
+.problem-city-badge { font-size: 0.77rem; color: var(--text-muted); }
+.view-solutions-btn { background: none; border: 1.5px solid var(--blue); color: var(--blue); padding: 6px 14px; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.18s; }
+.view-solutions-btn:hover { background: var(--blue); color: white; }
+.inline-solutions { display: none; margin-top: 10px; padding: 14px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+.inline-solutions.open { display: block; animation: fadeInUp 0.3s ease; }
+.inline-solution-item { font-size: 0.86rem; color: var(--text); padding: 7px 0; border-bottom: 1px solid var(--border); }
+.inline-solution-item:last-child { border-bottom: none; }
+ 
+/* SOLUTIONS */
+#solutions { background: var(--bg-white); }
+.solutions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; margin-top: 52px; }
+.solution-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 13px; }
+.solution-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.solution-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.solution-icon { font-size: 1.9rem; }
+.impact-badge { font-size: 0.7rem; font-weight: 600; padding: 3px 11px; border-radius: 100px; letter-spacing: 0.04em; }
+.impact-high { background: var(--green-light); color: var(--green); }
+.impact-medium { background: #FDF3E5; color: #A05A00; }
+.impact-low { background: #EEF0FD; color: #3B43B5; }
+.solution-card h3 { color: var(--text); font-size: 1.02rem; }
+.solution-card > p { font-size: 0.88rem; }
+.solution-expand-btn { background: none; border: none; color: var(--blue); font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 500; cursor: pointer; padding: 0; text-align: left; display: flex; align-items: center; gap: 5px; }
+.solution-details { display: none; font-size: 0.86rem; color: var(--text-muted); padding: 13px; background: var(--bg-white); border-radius: var(--radius); border: 1px solid var(--border); }
+.solution-details.open { display: block; animation: fadeInUp 0.3s ease; }
+.solution-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 13px; border-top: 1px solid var(--border); margin-top: auto; }
+.upvote-btn { display: flex; align-items: center; gap: 7px; background: var(--bg-white); border: 1.5px solid var(--border); border-radius: 100px; padding: 7px 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 500; color: var(--text-muted); transition: all 0.2s; }
+.upvote-btn:hover { border-color: var(--orange); color: var(--orange); }
+.upvote-btn.voted { background: var(--orange-light); border-color: var(--orange); color: var(--orange); }
+.upvote-count { font-weight: 600; min-width: 20px; text-align: center; }
+@keyframes bump { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
+.bump-anim { animation: bump 0.3s ease; }
+.youth-highlight { background: linear-gradient(135deg, #1B4FD8 0%, #0F2E85 100%); border-radius: var(--radius-lg); padding: 30px; color: white; grid-column: 1 / -1; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+.youth-avatar { width: 68px; height: 68px; background: rgba(255,255,255,0.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+.youth-highlight h3 { color: white; font-size: 1.15rem; margin-bottom: 5px; }
+.youth-highlight p { color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-bottom: 12px; }
+.youth-tag { background: rgba(255,255,255,0.18); color: white; font-size: 0.73rem; padding: 3px 9px; border-radius: 100px; margin: 2px; display: inline-block; }
+ 
+/* IMPACT */
+#impact { background: var(--bg); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-top: 52px; }
+.stat-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px 22px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+.stat-icon { font-size: 1.9rem; margin-bottom: 11px; }
+.stat-num { font-family: 'Syne', sans-serif; font-size: 2.3rem; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.stat-label { font-size: 0.87rem; color: var(--text-muted); }
+.progress-section { margin-top: 52px; }
+.progress-item { margin-bottom: 26px; }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.progress-label { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+.progress-val { font-size: 0.88rem; font-weight: 600; color: var(--blue); }
+.progress-track { height: 7px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 100px; width: 0; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.fill-blue { background: var(--blue); }
+.fill-orange { background: var(--orange); }
+.fill-green { background: var(--green); }
+ 
+/* COMMUNITY */
+#community { background: var(--bg-white); }
+.community-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin-top: 44px; }
+.community-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; transition: transform 0.2s, box-shadow 0.2s; }
+.community-card:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+.community-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 13px; }
+.community-card h4 { color: var(--text); font-size: 0.93rem; margin-bottom: 3px; }
+.community-card .role { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 11px; }
+.community-card p { font-size: 0.86rem; margin-bottom: 0; }
+ 
+/* FORM */
+#submit { background: var(--bg-white); }
+.form-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: start; margin-top: 52px; }
+@media (max-width: 768px) { .form-layout { grid-template-columns: 1fr; } }
+.form-info-block { position: sticky; top: 82px; }
+.form-info-block h2 { color: var(--text); margin-bottom: 14px; }
+.form-info-block > p { margin-bottom: 22px; }
+.form-feature { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
+.form-feature-icon { width: 38px; height: 38px; border-radius: 9px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.form-feature h4 { font-size: 0.92rem; color: var(--text); margin-bottom: 2px; }
+.form-feature p { font-size: 0.83rem; margin: 0; }
+.solution-form { display: flex; flex-direction: column; gap: 18px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 0.86rem; font-weight: 500; color: var(--text); }
+.form-group input, .form-group select, .form-group textarea { padding: 11px 15px; border: 1.5px solid var(--border); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 0.93rem; color: var(--text); background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; outline: none; -webkit-appearance: none; appearance: none; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(27,79,216,0.1); background: var(--bg-white); }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+.form-submit-btn { width: 100%; padding: 14px; background: var(--blue); color: white; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 0.97rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.form-submit-btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(27,79,216,0.3); }
+.form-submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+.form-success { display: none; padding: 22px; background: var(--green-light); border: 1.5px solid var(--green); border-radius: var(--radius-lg); text-align: center; animation: fadeInUp 0.4s ease; }
+.form-success.show { display: block; }
+.form-success-icon { font-size: 2.4rem; margin-bottom: 11px; }
+.form-success h3 { color: var(--green); font-size: 1.15rem; margin-bottom: 7px; }
+.form-success p { color: #2D6A40; font-size: 0.88rem; }
+ 
+/* ABOUT */
+#about { background: var(--bg); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+@media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+.about-visual { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px; text-align: center; }
+.about-logo-big { font-family: 'Syne', sans-serif; font-size: 2.3rem; font-weight: 800; color: var(--text); margin-bottom: 7px; }
+.about-logo-big span { color: var(--blue); }
+.about-tagline { font-size: 0.87rem; color: var(--text-muted); margin-bottom: 28px; }
+.about-badges { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-bottom: 28px; }
+.about-badge { padding: 7px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 500; border: 1.5px solid; }
+.badge-mit { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+.badge-uwc { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+.badge-nepal { border-color: var(--green); color: var(--green); background: var(--green-light); }
+.value-list { list-style: none; text-align: left; }
+.value-item { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--text-muted); }
+.value-item:last-child { border-bottom: none; }
+.value-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+ 
+@media (max-width: 768px) {
+  .section { padding: 60px 0; }
+  .hero-stats { gap: 22px; }
+  .hero-stat-divider { display: none; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+ 
+<!-- NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <span class="nav-logo-dot" aria-hidden="true"></span>
+      CitySolve Nepal
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explore">Explore Problems</a></li>
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#submit" class="btn btn-primary btn-sm">Submit Solution</a>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#explore" onclick="closeMobileMenu()">Explore Problems</a>
+    <a href="#solutions" onclick="closeMobileMenu()">Solutions</a>
+    <a href="#community" onclick="closeMobileMenu()">Community</a>
+    <a href="#about" onclick="closeMobileMenu()">About</a>
+    <a href="#submit" onclick="closeMobileMenu()">Submit Solution</a>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<section id="hero" aria-label="Hero section">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-blob blob-3"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot" aria-hidden="true"></span>
+        Nepal's first community innovation platform
+      </div>
+      <h1 class="hero-title">Solve Real Problems<br>in <span>Your City</span></h1>
+      <p class="hero-sub">Collaborate, innovate, and create lasting impact across Nepal's cities. From Kathmandu to Biratnagar — your ideas matter.</p>
+      <div class="hero-actions">
+        <a href="#explore" class="btn btn-primary">Explore Problems</a>
+        <a href="#submit" class="btn btn-outline">Submit a Solution &rarr;</a>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div>
+          <div class="hero-stat-num" id="stat-ideas">0</div>
+          <div class="hero-stat-label">Ideas Submitted</div>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div>
+          <div class="hero-stat-num" id="stat-projects">0</div>
+          <div class="hero-stat-label">Community Projects</div>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div>
+          <div class="hero-stat-num" id="stat-members">0</div>
+          <div class="hero-stat-label">Active Members</div>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div>
+          <div class="hero-stat-num" id="stat-cities">0</div>
+          <div class="hero-stat-label">Cities Covered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="section" aria-labelledby="how-title">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title" id="how-title">From Problem to Impact in 3 Steps</h2>
+      <p class="section-sub">A structured approach inspired by MIT design thinking — grounded in Nepal's real challenges.</p>
+    </div>
+    <div class="steps-grid">
+      <article class="step-card reveal">
+        <div class="step-number" aria-hidden="true">01</div>
+        <div class="step-icon" aria-hidden="true">&#128269;</div>
+        <h3>Identify the Problem</h3>
+        <p>Browse or report urban challenges in your city. Filter by category — environment, transport, water, and more.</p>
+        <div style="margin-top:14px;"><span class="tag tag-env">Environment</span><span class="tag tag-transport">Transport</span><span class="tag tag-water">Water</span></div>
+      </article>
+      <article class="step-card reveal" style="transition-delay:0.1s">
+        <div class="step-number" aria-hidden="true">02</div>
+        <div class="step-icon" aria-hidden="true">&#129309;</div>
+        <h3>Collaborate &amp; Prototype</h3>
+        <p>Connect with students, NGOs, and changemakers. Build teams around shared problems and prototype solutions together.</p>
+        <div style="margin-top:14px;"><span class="tag tag-social">Teamwork</span><span class="tag tag-infra">Innovation</span></div>
+      </article>
+      <article class="step-card reveal" style="transition-delay:0.2s">
+        <div class="step-number" aria-hidden="true">03</div>
+        <div class="step-icon" aria-hidden="true">&#128640;</div>
+        <h3>Launch &amp; Scale</h3>
+        <p>Submit your solution, earn community votes, and connect with local partners to bring it to life in your neighbourhood.</p>
+        <div style="margin-top:14px;"><span class="tag tag-sustain">Sustainable</span><span class="tag tag-health">High Impact</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+ 
+<!-- CITY / PROBLEM EXPLORER -->
+<section id="explore" class="section" aria-labelledby="explore-title">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Problem Explorer</span>
+      <h2 class="section-title" id="explore-title">Urban Challenges Across Nepal</h2>
+      <p class="section-sub">Select a city to see specific challenges its communities face. Click any problem to reveal existing solutions.</p>
+    </div>
+    <div class="city-grid" role="group" aria-label="Choose a city">
+      <button class="city-card active" id="city-all" onclick="selectCity('all')" aria-pressed="true">
+        <span class="city-emoji" aria-hidden="true">&#127475;&#127477;</span>
+        <h4>All Cities</h4>
+        <p>Nationwide view</p>
+        <span class="city-count" id="count-all">8 Problems</span>
+      </button>
+      <button class="city-card" id="city-kathmandu" onclick="selectCity('kathmandu')" aria-pressed="false">
+        <span class="city-emoji" aria-hidden="true">&#127961;</span>
+        <h4>Kathmandu</h4>
+        <p>Capital &amp; largest city</p>
+        <span class="city-count">3 Problems</span>
+      </button>
+      <button class="city-card" id="city-pokhara" onclick="selectCity('pokhara')" aria-pressed="false">
+        <span class="city-emoji" aria-hidden="true">&#9968;</span>
+        <h4>Pokhara</h4>
+        <p>Tourism &amp; lakeside city</p>
+        <span class="city-count">2 Problems</span>
+      </button>
+      <button class="city-card" id="city-lalitpur" onclick="selectCity('lalitpur')" aria-pressed="false">
+        <span class="city-emoji" aria-hidden="true">&#127963;</span>
+        <h4>Lalitpur</h4>
+        <p>Heritage &amp; arts city</p>
+        <span class="city-count">2 Problems</span>
+      </button>
+      <button class="city-card" id="city-biratnagar" onclick="selectCity('biratnagar')" aria-pressed="false">
+        <span class="city-emoji" aria-hidden="true">&#127981;</span>
+        <h4>Biratnagar</h4>
+        <p>Industrial hub</p>
+        <span class="city-count">1 Problem</span>
+      </button>
+    </div>
+    <div class="problems-header">
+      <div class="problems-city-name" id="cityLabel">All Cities &mdash; 8 Active Problems</div>
+      <div class="filter-tabs" role="group" aria-label="Filter by category">
+        <button class="filter-tab active" onclick="filterProblems('all',this)">All</button>
+        <button class="filter-tab" onclick="filterProblems('Environment',this)">Environment</button>
+        <button class="filter-tab" onclick="filterProblems('Transport',this)">Transport</button>
+        <button class="filter-tab" onclick="filterProblems('Water',this)">Water</button>
+        <button class="filter-tab" onclick="filterProblems('Waste',this)">Waste</button>
+        <button class="filter-tab" onclick="filterProblems('Infrastructure',this)">Infrastructure</button>
+      </div>
+    </div>
+    <div class="problems-grid" id="problemsGrid" aria-live="polite" aria-label="Problem list"></div>
+  </div>
+</section>
+ 
+<!-- SOLUTIONS SHOWCASE -->
+<section id="solutions" class="section" aria-labelledby="solutions-title">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Community Solutions</span>
+      <h2 class="section-title" id="solutions-title">Innovations Built by Nepalis, for Nepalis</h2>
+      <p class="section-sub">Real solutions proposed and developed by community members. Upvote the ideas you believe in.</p>
+    </div>
+    <div class="solutions-grid" id="solutionsGrid"></div>
+  </div>
+</section>
+ 
+<!-- IMPACT STATS -->
+<section id="impact" class="section" aria-labelledby="impact-title">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Community Impact</span>
+      <h2 class="section-title" id="impact-title">Growing Stronger Together</h2>
+      <p class="section-sub">Real numbers reflecting real change happening across Nepal's urban communities.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-icon" aria-hidden="true">&#128161;</div>
+        <div class="stat-num">120+</div>
+        <div class="stat-label">Ideas Submitted</div>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.1s">
+        <div class="stat-icon" aria-hidden="true">&#127807;</div>
+        <div class="stat-num">35</div>
+        <div class="stat-label">Active Projects</div>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.2s">
+        <div class="stat-icon" aria-hidden="true">&#128101;</div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Community Members</div>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.3s">
+        <div class="stat-icon" aria-hidden="true">&#127942;</div>
+        <div class="stat-num">18</div>
+        <div class="stat-label">Solutions Implemented</div>
+      </div>
+    </div>
+    <div class="progress-section reveal">
+      <h3 style="color:var(--text);margin-bottom:28px;font-size:1.05rem;">Progress by Category</h3>
+      <div class="progress-item">
+        <div class="progress-info"><span class="progress-label">Environmental Solutions</span><span class="progress-val">72%</span></div>
+        <div class="progress-track"><div class="progress-fill fill-blue" data-width="72"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span class="progress-label">Transport &amp; Infrastructure</span><span class="progress-val">48%</span></div>
+        <div class="progress-track"><div class="progress-fill fill-orange" data-width="48"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span class="progress-label">Water &amp; Sanitation</span><span class="progress-val">61%</span></div>
+        <div class="progress-track"><div class="progress-fill fill-green" data-width="61"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-info"><span class="progress-label">Waste Management</span><span class="progress-val">39%</span></div>
+        <div class="progress-track"><div class="progress-fill fill-orange" data-width="39"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- COMMUNITY -->
+<section id="community" class="section" aria-labelledby="community-title">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Our Community</span>
+      <h2 class="section-title" id="community-title">The Changemakers Behind CitySolve</h2>
+      <p class="section-sub">Students, activists, engineers, and dreamers — united by one goal: a better Nepal.</p>
+    </div>
+    <div class="community-grid" id="communityGrid"></div>
+  </div>
+</section>
+ 
+<!-- SUBMIT FORM -->
+<section id="submit" class="section" aria-labelledby="submit-title">
+  <div class="container">
+    <div class="form-layout">
+      <div class="form-info-block reveal">
+        <span class="section-label">Submit Your Idea</span>
+        <h2 id="submit-title">Your Idea Can Change a City</h2>
+        <p>Have an innovative solution to an urban problem in Nepal? Share it here. Every idea counts — even small ones create ripples.</p>
+        <div class="form-feature">
+          <div class="form-feature-icon" aria-hidden="true">&#127758;</div>
+          <div><h4>Community Reviewed</h4><p>Your solution gets voted on and refined by hundreds of active members.</p></div>
+        </div>
+        <div class="form-feature">
+          <div class="form-feature-icon" aria-hidden="true">&#128300;</div>
+          <div><h4>MIT-Inspired Framework</h4><p>We apply design thinking to evaluate feasibility and scalability.</p></div>
+        </div>
+        <div class="form-feature">
+          <div class="form-feature-icon" aria-hidden="true">&#129309;</div>
+          <div><h4>NGO Connections</h4><p>Top solutions get connected with local NGOs and government bodies.</p></div>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:0.15s">
+        <form class="solution-form" id="solutionForm" aria-label="Submit your solution">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Full Name *</label>
+              <input type="text" id="fname" placeholder="Ram Bhatta" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="femail">Email Address *</label>
+              <input type="email" id="femail" placeholder="XYZmail.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fcity">Your City *</label>
+              <select id="fcity">
+                <option value="">Select city...</option>
+                <option value="kathmandu">Kathmandu</option>
+                <option value="pokhara">Pokhara</option>
+                <option value="lalitpur">Lalitpur (Patan)</option>
+                <option value="biratnagar">Biratnagar</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fcategory">Problem Category *</label>
+              <select id="fcategory">
+                <option value="">Select category...</option>
+                <option value="environment">Air &amp; Environment</option>
+                <option value="waste">Waste Management</option>
+                <option value="transport">Transport</option>
+                <option value="water">Water &amp; Sanitation</option>
+                <option value="infrastructure">Infrastructure</option>
+                <option value="social">Social &amp; Community</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ftitle">Solution Title *</label>
+            <input type="text" id="ftitle" placeholder="e.g. Rooftop Rainwater Harvesting Network">
+          </div>
+          <div class="form-group">
+            <label for="fidea">Describe Your Solution *</label>
+            <textarea id="fidea" placeholder="Explain your solution: What problem does it address? How does it work? Who benefits? What resources are needed?"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="fimpact">Expected Impact</label>
+            <select id="fimpact">
+              <option value="">Select expected impact...</option>
+              <option value="low">Low &mdash; Helps 50&ndash;200 people</option>
+              <option value="medium">Medium &mdash; Helps 200&ndash;2,000 people</option>
+              <option value="high">High &mdash; Helps 2,000+ people</option>
+            </select>
+          </div>
+          <button type="button" class="form-submit-btn" id="submitBtn" onclick="handleSubmit()">
+            Submit My Solution &#128640;
+          </button>
+        </form>
+        <div class="form-success" id="formSuccess" role="alert">
+          <div class="form-success-icon" aria-hidden="true">&#9989;</div>
+          <h3>Your idea has been recorded!</h3>
+          <p>Thank you for contributing to CitySolve Nepal. Our community team will review your submission within 48 hours and reach out if it's featured.</p>
+          <button class="btn btn-outline btn-sm" style="margin-top:14px;" onclick="resetForm()">Submit Another Idea</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<script>
+// ===== DATA =====
+var PROBLEMS = [
+  { id:'p1', city:'kathmandu', title:'Toxic Air Quality Crisis', icon:'&#127795;', description:'Kathmandu Valley consistently ranks among the most polluted cities in Asia. Brick kilns, diesel vehicles, and open waste burning push PM2.5 levels 10x above WHO limits each winter, causing thousands of respiratory cases annually.', tags:['Environment','Health'], category:'Environment', solutions:['Electric rickshaw subsidy programme (Bagmati corridor)','Real-time AQI display boards across 12 key locations','Brick kiln technology upgrade pilot with 30 factories'] },
+  { id:'p2', city:'kathmandu', title:'Chronic Traffic Gridlock', icon:'&#128663;', description:"Kathmandu's medieval road network struggles with 1.5 million daily commuters. Peak-hour average speed has dropped to 8 km/h — slower than a bicycle. Widening roads alone cannot solve what is fundamentally a mobility systems problem.", tags:['Transport','Infrastructure'], category:'Transport', solutions:['Dedicated bus rapid transit (BRT) corridor pilot','Congestion pricing in the Ring Road inner zone','Park-and-ride hubs at 5 city entry points'] },
+  { id:'p3', city:'kathmandu', title:'Solid Waste Overflow', icon:'&#128465;', description:"Kathmandu generates 600+ tonnes of waste daily but only 70% is collected. Unsorted garbage piles accumulate on riverbeds and open lots. The Sisdol landfill — the valley's only disposal site — is critically overloaded.", tags:['Waste','Environment'], category:'Waste', solutions:['Ward-level composting & biogas units','Informal waste-picker formalisation programme','Mandatory household waste segregation at source'] },
+  { id:'p4', city:'pokhara', title:'Tourism Waste Pollution', icon:'&#9978;', description:"Pokhara's rapid tourism growth — 1 million visitors per year — has overwhelmed its waste infrastructure. Phewa Lake is threatened by plastic runoff, and trekking trails in the Annapurna circuit see growing quantities of single-use plastic.", tags:['Waste','Environment'], category:'Waste', solutions:['Eco-tourism certification for hotels','Phewa Lake plastic clean-up brigade','Refill station network along trekking routes'] },
+  { id:'p5', city:'pokhara', title:'Unplanned Urban Sprawl', icon:'&#127968;', description:"Pokhara's growth has been almost entirely unplanned. Fertile land around Fewa Lake is being paved for hotels without environmental assessments, threatening biodiversity and groundwater recharge zones.", tags:['Infrastructure','Environment'], category:'Infrastructure', solutions:['Green-belt buffer zone legislation','Urban growth boundary demarcation','Incentives for vertical over horizontal development'] },
+  { id:'p6', city:'lalitpur', title:'Groundwater Depletion', icon:'&#128167;', description:"Lalitpur's traditional hiti (stone spout) water system is failing due to groundwater over-extraction. The city's 300,000 residents face acute water scarcity for 6+ months per year, with poorer neighbourhoods most severely affected.", tags:['Water','Infrastructure'], category:'Water', solutions:['Hiti (stone spout) restoration project — 38 spouts targeted','Rooftop rainwater harvesting mandate for new buildings','Community groundwater recharge ponds in 5 wards'] },
+  { id:'p7', city:'lalitpur', title:'Monsoon Urban Flooding', icon:'&#127754;', description:"Poorly maintained drainage and increased impervious surfaces cause annual flooding in Lalitpur's low-lying areas. In 2023, flooding damaged 400+ homes and disrupted businesses for weeks. Climate change is worsening the frequency.", tags:['Water','Infrastructure'], category:'Water', solutions:['Permeable pavement pilots in 3 wards','Community-maintained drainage canal programme','Early warning SMS alert system for flood-prone zones'] },
+  { id:'p8', city:'biratnagar', title:'Industrial Air & Water Pollution', icon:'&#127981;', description:"Biratnagar's industrial belt — jute mills, steel plants, and tanneries — discharges untreated effluent into the Singhiya River and emits unfiltered smoke. Workers in industrial zones report 3x the national average rate of lung disease.", tags:['Environment','Health'], category:'Environment', solutions:['Common Effluent Treatment Plant shared by 22 factories','Industrial pollution real-time monitoring dashboard','Community health clinic programme for industrial workers'] }
+];
+ 
+var SOLUTIONS = [
+  { id:'s1', title:'Solar-Powered E-Rickshaw Network', icon:'&#9889;', description:"Replace Kathmandu's 8,000 diesel three-wheelers with solar-charged electric rickshaws, reducing daily carbon emissions by an estimated 180 tonnes.", details:'The scheme involves subsidised loans for rickshaw drivers, 40 solar charging hubs across the valley, and a 3-year tax waiver on EV imports. A pilot in Lalitpur showed 62% cost reduction for drivers and near-zero local emissions.', impact:'high', votes:284, tags:['Transport','Environment'], city:'Kathmandu' },
+  { id:'s2', title:'Phewa Lake Plastic Interception', icon:'&#127754;', description:"A floating barrier system at Pokhara's Phewa Lake inlet, paired with a youth volunteer brigade, intercepts plastic before it enters the lake ecosystem.", details:'The system captures around 800kg of plastic per month. Monthly clean-up events involving local schools have enrolled 1,200+ student volunteers. Lake water transparency measurements show an 18% improvement after 6 months.', impact:'high', votes:197, tags:['Waste','Environment'], city:'Pokhara' },
+  { id:'s3', title:'Ward-Level Biogas from Food Waste', icon:'&#9851;', description:"Community-scale biogas plants in each of Kathmandu's 32 wards that convert wet kitchen waste into cooking gas and organic fertiliser for urban gardens.", details:"Each 2-tonne-per-day plant serves 400 households and produces enough gas to replace 60% of LPG usage in participating homes. The fertiliser is sold to peri-urban farmers, making each plant financially self-sustaining within 18 months.", impact:'medium', votes:152, tags:['Waste','Environment'], city:'Kathmandu' },
+  { id:'s4', title:'Hiti Water System Revival', icon:'&#128167;', description:"Lalitpur's UNESCO-listed stone spout (hiti) network is being restored using traditional stone-laying crafts combined with modern recharge well technology.", details:'Of 72 historical hiti in Lalitpur, 38 remain structurally sound but dry. Community-dug recharge wells upstream of each spout have restored 11 hitis to flowing water. The project is led by local artisan cooperatives.', impact:'high', votes:219, tags:['Water','Infrastructure'], city:'Lalitpur' },
+  { id:'s5', title:'School Rooftop Air Quality Monitors', icon:'&#128225;', description:'A network of 80 low-cost PM2.5 sensors on school rooftops across the Kathmandu Valley, feeding into a public dashboard and triggering outdoor activity restrictions on high-pollution days.', details:'Sensors cost $120 each and are maintained by trained student tech clubs. Real-time data is available via SMS query (for feature phones) and a web dashboard. The system has triggered 34 school outdoor restrictions, protecting 40,000+ students.', impact:'medium', votes:133, tags:['Environment','Health'], city:'Kathmandu' },
+  { id:'s6', title:'Industrial CETP, Biratnagar', icon:'&#127981;', description:"A shared Common Effluent Treatment Plant serving 22 factories in Biratnagar's industrial zone, reducing compliance costs for small manufacturers while drastically cutting river pollution.", details:"Individual treatment plants are financially impossible for small factories. A shared CETP amortises costs across all users and is managed by a neutral cooperative. Biratnagar's Singhiya River oxygen levels rose measurably after the pilot.", impact:'high', votes:175, tags:['Environment','Health'], city:'Biratnagar' }
+];
+ 
+var COMMUNITY = [
+  { name:'Priya Shrestha', role:'Environmental Engineer, Kathmandu', avatar:'&#127807;', color:'#E8F5ED', quote:"CitySolve gave my rainwater research a community. Now it's being piloted in 4 wards." },
+  { name:'Bikash Tamang', role:'Student Innovator, UWC Mahindra', avatar:'&#128640;', color:'#E8EEFB', quote:"I found collaborators for my air sensor project through CitySolve. We went from idea to 80 sensors in 8 months." },
+  { name:'Sushila Gurung', role:'NGO Director, Pokhara Clean', avatar:'&#9851;', color:'#FDF0EA', quote:"We've connected with 12 solution-providers through CitySolve we never would have found otherwise." },
+  { name:'Roshan KC', role:'Urban Planner, Lalitpur Municipality', avatar:'&#127963;', color:'#F5E8FD', quote:"The hiti restoration project started as a CitySolve submission. It's now a government-backed heritage programme." },
+  { name:'Anita Rai', role:'High School Student, Biratnagar', avatar:'&#128300;', color:'#FDF3E5', quote:"I'm 17 and my industrial waste mapping project has already been presented to Biratnagar municipality." },
+  { name:'Dev Acharya', role:'Tech Entrepreneur, Kathmandu', avatar:'&#128161;', color:'#E5F4FD', quote:"CitySolve connected me with the right policy people to scale my e-rickshaw charging network beyond the pilot." }
+];
+ 
+// ===== STATE =====
+var currentCity = 'all';
+var currentFilter = 'all';
+var voteState = {};
+ 
+// ===== HELPERS =====
+function tagClass(t) {
+  return { 'Environment':'env','Transport':'transport','Waste':'waste','Water':'water','Infrastructure':'infra','Health':'health','Social':'social' }[t] || 'social';
+}
+function cityLabel(slug) {
+  return { kathmandu:'Kathmandu', pokhara:'Pokhara', lalitpur:'Lalitpur', biratnagar:'Biratnagar' }[slug] || slug;
+}
+ 
+// ===== RENDER PROBLEMS =====
+function renderProblems() {
+  var grid = document.getElementById('problemsGrid');
+  var filtered = PROBLEMS.filter(function(p) {
+    return (currentCity === 'all' || p.city === currentCity) && (currentFilter === 'all' || p.category === currentFilter);
+  });
+  if (!filtered.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted);">No problems match this filter. Try a different city or category.</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(function(p) {
+    return '<article class="problem-card" id="card-' + p.id + '" aria-label="Problem: ' + p.title + '">'
+      + '<div class="problem-card-header">'
+      + '<span class="problem-icon" aria-hidden="true">' + p.icon + '</span>'
+      + '<div><h3>' + p.title + '</h3></div>'
+      + '</div>'
+      + '<p class="problem-card-desc">' + p.description + '</p>'
+      + '<div class="problem-tags">' + p.tags.map(function(t){ return '<span class="tag tag-'+tagClass(t)+'">'+t+'</span>'; }).join('') + '</div>'
+      + '<div class="problem-card-footer">'
+      + '<span class="problem-city-badge">&#128205; ' + cityLabel(p.city) + '</span>'
+      + '<button class="view-solutions-btn" onclick="toggleSolutions(\'' + p.id + '\')" aria-expanded="false" aria-controls="sol-' + p.id + '">'
+      + 'View Solutions (' + p.solutions.length + ')'
+      + '</button>'
+      + '</div>'
+      + '<div class="inline-solutions" id="sol-' + p.id + '">'
+      + '<strong style="font-size:0.8rem;color:var(--text);display:block;margin-bottom:7px;">Community Solutions:</strong>'
+      + p.solutions.map(function(s){ return '<div class="inline-solution-item"><strong style="color:var(--green)">&rarr;</strong> ' + s + '</div>'; }).join('')
+      + '</div>'
+      + '</article>';
+  }).join('');
+}
+ 
+// ===== CITY SELECTION =====
+function selectCity(city) {
+  currentCity = city;
+  currentFilter = 'all';
+  document.querySelectorAll('.city-card').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+  var btn = document.getElementById('city-' + city);
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
+  document.querySelectorAll('.filter-tab').forEach(function(t,i){ t.classList.toggle('active', i === 0); });
+  var count = city === 'all' ? PROBLEMS.length : PROBLEMS.filter(function(p){ return p.city === city; }).length;
+  var names = { all:'All Cities', kathmandu:'Kathmandu', pokhara:'Pokhara', lalitpur:'Lalitpur', biratnagar:'Biratnagar' };
+  document.getElementById('cityLabel').textContent = names[city] + ' \u2014 ' + count + ' Active Problem' + (count !== 1 ? 's' : '');
+  renderProblems();
+}
+ 
+// ===== FILTER =====
+function filterProblems(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  renderProblems();
+}
+ 
+// ===== TOGGLE INLINE SOLUTIONS =====
+function toggleSolutions(id) {
+  var panel = document.getElementById('sol-' + id);
+  var card = document.getElementById('card-' + id);
+  if (!panel || !card) return;
+  var btn = card.querySelector('.view-solutions-btn');
+  var isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  var prob = PROBLEMS.filter(function(p){ return p.id === id; })[0];
+  btn.textContent = isOpen ? 'View Solutions (' + (prob ? prob.solutions.length : '') + ')' : 'Hide Solutions \u2191';
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+ 
+// ===== RENDER SOLUTIONS =====
+function renderSolutions() {
+  var grid = document.getElementById('solutionsGrid');
+  var html = SOLUTIONS.map(function(s) {
+    voteState[s.id] = { count: s.votes, voted: false };
+    return '<article class="solution-card reveal" aria-label="Solution: ' + s.title + '">'
+      + '<div class="solution-card-top"><span class="solution-icon" aria-hidden="true">' + s.icon + '</span>'
+      + '<span class="impact-badge impact-' + s.impact + '">' + s.impact.charAt(0).toUpperCase() + s.impact.slice(1) + ' Impact</span></div>'
+      + '<h3>' + s.title + '</h3>'
+      + '<p>' + s.description + '</p>'
+      + '<button class="solution-expand-btn" id="expbtn-' + s.id + '" onclick="toggleDetails(\'' + s.id + '\')" aria-expanded="false" aria-controls="det-' + s.id + '">'
+      + 'Read full details &#9660;'
+      + '</button>'
+      + '<div class="solution-details" id="det-' + s.id + '"><p>' + s.details + '</p></div>'
+      + '<div class="solution-footer">'
+      + '<div>' + s.tags.map(function(t){ return '<span class="tag tag-'+tagClass(t)+'">'+t+'</span>'; }).join('') + '</div>'
+      + '<button class="upvote-btn" id="vbtn-' + s.id + '" onclick="upvote(\'' + s.id + '\')" aria-label="Upvote, ' + s.votes + ' votes">'
+      + '&#9650; <span class="upvote-count" id="vc-' + s.id + '">' + s.votes + '</span>'
+      + '</button>'
+      + '</div>'
+      + '</article>';
+  }).join('');
+ 
+  // Youth Highlight
+  html += '<div class="youth-highlight reveal" role="region" aria-label="Youth Innovation Highlight">'
+    + '<div class="youth-avatar" aria-hidden="true">&#11088;</div>'
+    + '<div>'
+    + '<span style="display:inline-block;background:rgba(255,255,255,0.18);color:white;font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:100px;margin-bottom:9px;letter-spacing:0.08em;text-transform:uppercase;">Youth Innovation Highlight</span>'
+    + "<h3>Anita Rai's Industrial Waste Map, Biratnagar</h3>"
+    + "<p>At 17, Anita spent 3 months mapping every industrial discharge point along Biratnagar's Singhiya River — by bicycle, pH meter, and open-source GIS tools. Her findings were presented to Biratnagar municipality and directly informed the CETP proposal.</p>"
+    + '<div><span class="youth-tag">&#128300; Data Collection</span><span class="youth-tag">&#128506; GIS Mapping</span><span class="youth-tag">&#9851; Sustainability</span><span class="youth-tag">&#127942; Municipal Award 2024</span></div>'
+    + '</div></div>';
+ 
+  grid.innerHTML = html;
+}
+ 
+// ===== TOGGLE SOLUTION DETAILS =====
+function toggleDetails(id) {
+  var det = document.getElementById('det-' + id);
+  var btn = document.getElementById('expbtn-' + id);
+  if (!det || !btn) return;
+  var isOpen = det.classList.contains('open');
+  det.classList.toggle('open', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
+  btn.innerHTML = isOpen ? 'Read full details &#9660;' : 'Collapse details &#9650;';
+}
+ 
+// ===== UPVOTE =====
+function upvote(id) {
+  var st = voteState[id];
+  var countEl = document.getElementById('vc-' + id);
+  var btn = document.getElementById('vbtn-' + id);
+  if (!st || !countEl || !btn) return;
+  if (st.voted) { st.count--; st.voted = false; btn.classList.remove('voted'); }
+  else { st.count++; st.voted = true; btn.classList.add('voted'); }
+  countEl.textContent = st.count;
+  countEl.classList.remove('bump-anim');
+  void countEl.offsetWidth;
+  countEl.classList.add('bump-anim');
+  btn.setAttribute('aria-label', 'Upvote, ' + st.count + ' votes');
+}
+ 
+// ===== RENDER COMMUNITY =====
+function renderCommunity() {
+  var grid = document.getElementById('communityGrid');
+  grid.innerHTML = COMMUNITY.map(function(m) {
+    return '<article class="community-card reveal" aria-label="Community member: ' + m.name + '">'
+      + '<div class="community-avatar" style="background:' + m.color + '" aria-hidden="true">' + m.avatar + '</div>'
+      + '<h4>' + m.name + '</h4>'
+      + '<p class="role">' + m.role + '</p>'
+      + '<p>&ldquo;' + m.quote + '&rdquo;</p>'
+      + '</article>';
+  }).join('');
+}
+ 
+// ===== FORM =====
+function handleSubmit() {
+  var fields = ['fname','femail','fcity','fcategory','ftitle','fidea'];
+  var valid = true;
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el || !el.value.trim()) {
+      if (el) { el.style.borderColor = '#E24B4A'; el.focus(); }
+      valid = false;
+    } else {
+      if (el) el.style.borderColor = '';
+    }
+  });
+  if (!valid) return;
+  var btn = document.getElementById('submitBtn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+  setTimeout(function() {
+    document.getElementById('solutionForm').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  }, 900);
+}
+function resetForm() {
+  var form = document.getElementById('solutionForm');
+  var success = document.getElementById('formSuccess');
+  var btn = document.getElementById('submitBtn');
+  ['fname','femail','fcity','fcategory','ftitle','fidea','fimpact'].forEach(function(id){ var el = document.getElementById(id); if(el){ el.value = ''; el.style.borderColor=''; } });
+  form.style.display = '';
+  success.classList.remove('show');
+  btn.textContent = 'Submit My Solution \uD83D\uDE80';
+  btn.disabled = false;
+}
+ 
+// ===== MOBILE MENU =====
+document.getElementById('hamburgerBtn').addEventListener('click', function() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+ 
+// ===== NAVBAR SCROLL =====
+window.addEventListener('scroll', function() {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+ 
+// ===== HERO COUNTERS =====
+function animateCounter(el, target, suffix) {
+  var current = 0;
+  var step = Math.max(1, Math.ceil(target / 55));
+  var timer = setInterval(function() {
+    current = Math.min(current + step, target);
+    el.textContent = current + suffix;
+    if (current >= target) clearInterval(timer);
+  }, 28);
+}
+function startHeroCounters() {
+  animateCounter(document.getElementById('stat-ideas'), 120, '+');
+  animateCounter(document.getElementById('stat-projects'), 35, '');
+  animateCounter(document.getElementById('stat-members'), 500, '+');
+  animateCounter(document.getElementById('stat-cities'), 4, '');
+}
+ 
+// ===== SCROLL REVEAL =====
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+ 
+var progressObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.progress-fill').forEach(function(bar) { bar.style.width = bar.getAttribute('data-width') + '%'; });
+      progressObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+ 
+function handleSubmit() {
+  var name = document.getElementById('fname').value;
+  var email = document.getElementById('femail').value;
+  var city = document.getElementById('fcity').value;
+  var category = document.getElementById('fcategory').value;
+  var title = document.getElementById('ftitle').value;
+  var idea = document.getElementById('fidea').value;
+  var impact = document.getElementById('fimpact').value;
+
+  // Basic validation
+  if (!name || !email || !city || !category || !title || !idea) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  var subject = encodeURIComponent("New CitySolve Submission: " + title);
+
+  var body = encodeURIComponent(
+    "Full Name: " + name + "\n" +
+    "Email: " + email + "\n" +
+    "City: " + city + "\n" +
+    "Category: " + category + "\n" +
+    "Impact: " + impact + "\n\n" +
+    "Solution Idea:\n" + idea
+  );
+
+  // Opens email client
+  window.location.href = "mailto:debu1.adhikari@gmail.com?subject=" + subject + "&body=" + body;
+
+  // Show success UI
+  document.getElementById('solutionForm').style.display = "none";
+  document.getElementById('formSuccess').classList.add("show");
+}
+// ===== INIT =====
+(function init() {
+  renderProblems();
+  renderSolutions();
+  renderCommunity();
+ 
+  // Observe all static reveal elements
+  document.querySelectorAll('.reveal').forEach(function(el) { revealObs.observe(el); });
+ 
+  // Observe progress section
+  var ps = document.querySelector('.progress-section');
+  if (ps) progressObs.observe(ps);
+ 
+  // Animate hero counters on load
+  setTimeout(startHeroCounters, 350);
+ 
+  // After dynamic render, observe newly created reveal elements
+  setTimeout(function() {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(function(el) { revealObs.observe(el); });
+  }, 100);
+})();
+</script>
+</body>
+</html>
