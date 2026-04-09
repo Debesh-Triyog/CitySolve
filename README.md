@@ -1,6 +1,7 @@
 # 🌆 CitySolve Nepal  
 ### Community Innovation Hub for Real Urban Change
 
+https://github.com/Debesh-Triyog/CitySolve.git
 Welcome to **CitySolve Nepal** — a space where ideas turn into action, and communities come together to solve real problems in our cities 🇳🇵
 
 ---
